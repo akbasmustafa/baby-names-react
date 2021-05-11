@@ -1,12 +1,15 @@
 .App {
   text-align: center;
+  
+  margin: 10%;
   border: 5px solid;
   border-radius: 20px;
   border-top-color: darksalmon;
   border-left-color: darksalmon;
   border-right-color: cadetblue;
   border-bottom-color: cadetblue;
-  margin: 10%;
+}
+.nameContainer{
   padding:5%;
   display: flex;
   flex-wrap: wrap;
