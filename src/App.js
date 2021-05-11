@@ -1,25 +1,33 @@
-import logo from "./logo.svg";
 import "./App.css";
 import babyNamesData from "./babyNamesData.json";
 
 function App() {
-  console.log(babyNamesData);
+  //id: 0;  name: "Zahra";  sex: "f";
+
+  function sortNames(a, b) {
+    var nameA = a.name.toUpperCase();
+    var nameB = b.name.toUpperCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {babyNamesData.sort(sortNames).map((obj) => {
+        return (
+          <span
+            key={obj.id}
+            className={obj.sex === "m" ? "boyStyle" : "girlStyle"}
+          >
+            {obj.name}
+          </span>
+        );
+      })}
     </div>
   );
 }
