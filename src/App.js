@@ -5,6 +5,7 @@ import babyNamesData from "./babyNamesData.json";
 function App() {
   //id: 0;  name: "Zahra";  sex: "f";
   const [searchName, setSearchName] = useState("");
+  const [favoriteIds, setFavoriteIds] = useState([]);
 
   function sortNames(a, b) {
     var nameA = a.name.toUpperCase();
@@ -23,6 +24,22 @@ function App() {
     e.preventDefault();
     setSearchName(e.target.value);
   }
+  function handleAddFav(e) {
+    e.preventDefault();
+    const idOf = parseInt(e.target.getAttribute("id"));
+    const newArr = favoriteIds.concat(idOf);
+    setFavoriteIds(newArr);
+  }
+  function handleRemoveFav(e) {
+    e.preventDefault();
+    const idOf = parseInt(e.target.getAttribute("id"));
+    const index = favoriteIds.indexOf(idOf);
+    let newArr = [...favoriteIds];
+    if (index > -1) {
+      newArr.splice(index, 1);
+    }
+    setFavoriteIds(newArr);
+  }
   return (
     <div className="App">
       <input
@@ -32,17 +49,40 @@ function App() {
         onChange={handleSearch}
       />
       <div className="nameContainer">
+        <span className="tag">Favorites:</span>
         {babyNamesData
           .filter((obj) => {
-            const re = new RegExp(searchName, "i");
-            return re.test(obj.name);
+            return favoriteIds.includes(obj.id);
           })
           ?.sort(sortNames)
           .map((obj) => {
             return (
               <span
                 key={obj.id}
+                id={obj.id}
                 className={obj.sex === "m" ? "boyStyle" : "girlStyle"}
+                onClick={handleRemoveFav}
+              >
+                {obj.name}
+              </span>
+            );
+          })}
+      </div>
+      <hr className="solid" />
+      <div className="nameContainer">
+        {babyNamesData
+          .filter((obj) => {
+            const re = new RegExp(searchName, "i");
+            return re.test(obj.name) && !favoriteIds.includes(obj.id);
+          })
+          ?.sort(sortNames)
+          .map((obj) => {
+            return (
+              <span
+                key={obj.id}
+                id={obj.id}
+                className={obj.sex === "m" ? "boyStyle" : "girlStyle"}
+                onClick={handleAddFav}
               >
                 {obj.name}
               </span>

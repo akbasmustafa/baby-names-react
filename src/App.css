@@ -66,3 +66,9 @@
   border-radius: 3px;
   border: 2px solid darksalmon;
 }
+
+.tag{
+  font-style: oblique;
+  margin: 2px;
+  padding: 2px;
+}
