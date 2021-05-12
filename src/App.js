@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
 import babyNamesData from "./babyNamesData.json";
+import ButtonRadio from "./component/ButtonRadio";
+
 
 function App() {
-  //id: 0;  name: "Zahra";  sex: "f";
   const [searchName, setSearchName] = useState("");
   const [favoriteIds, setFavoriteIds] = useState([]);
+  const [sex, setSex] = useState("all");
 
   function sortNames(a, b) {
     var nameA = a.name.toUpperCase();
@@ -21,17 +23,19 @@ function App() {
   }
 
   function handleSearch(e) {
-    e.preventDefault();
+    setSex("all");
     setSearchName(e.target.value);
   }
+  function handleOptionSex(e) {
+    setSearchName("");
+    setSex(e.currentTarget.value);
+  }
   function handleAddFav(e) {
-    e.preventDefault();
     const idOf = parseInt(e.target.getAttribute("id"));
     const newArr = favoriteIds.concat(idOf);
     setFavoriteIds(newArr);
   }
   function handleRemoveFav(e) {
-    e.preventDefault();
     const idOf = parseInt(e.target.getAttribute("id"));
     const index = favoriteIds.indexOf(idOf);
     let newArr = [...favoriteIds];
@@ -48,6 +52,7 @@ function App() {
         value={searchName}
         onChange={handleSearch}
       />
+      <ButtonRadio setOption={handleOptionSex} option={sex} />
       <div className="nameContainer">
         <span className="tag">Favorites:</span>
         {babyNamesData
@@ -73,7 +78,11 @@ function App() {
         {babyNamesData
           .filter((obj) => {
             const re = new RegExp(searchName, "i");
-            return re.test(obj.name) && !favoriteIds.includes(obj.id);
+            const selectedSex =
+              sex === "all" ? true : sex === obj.sex ? true : false;
+            return (
+              re.test(obj.name) && !favoriteIds.includes(obj.id) && selectedSex
+            );
           })
           ?.sort(sortNames)
           .map((obj) => {
